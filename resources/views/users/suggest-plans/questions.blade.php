@@ -7,42 +7,86 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-center pt-5">
-            <div class="q-box col-6 shadow col-white text-center rounded-3 pt-5 pb-3 px-4">
-                <div class="row">
-                    <div class="col-6 offset-3 h3 p-2 border border-dark boorder-2 rounded-pill mb-4">Question {{session('question_no')}}</div>
+    <div class="questions-hero">
+        <div class="container">
+            <div class="questions-hero-content">
+                <h1 class="questions-title">
+                    <i class="fa-solid fa-compass me-3"></i>
+                    Plan Suggestions
+                </h1>
+                <p class="questions-subtitle">Answer a few questions to get personalized travel recommendations</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-5">
+        <div class="row justify-content-center">
+            <div class="q-box-modern col-lg-8 col-md-10 col-12">
+                <div class="question-header">
+                    <div class="question-number">
+                        <i class="fa-solid fa-question-circle me-2"></i>
+                        Question {{ session('question_no') ?? 1 }} of 5
+                    </div>
+                    <div class="progress-bar-container">
+                        @php
+                            $questionNo = session('question_no') ?? 1;
+                            $progress = ($questionNo / 5) * 100;
+                        @endphp
+                        <div class="progress-bar-fill" style="width: {{ $progress }}%"></div>
+                    </div>
                 </div>
-                <form id="search-button" method="GET">
-                    <div class="h2 fw-bold mb-5">{{ $question->question }}</div>
-                    <input type="hidden" name="question_id" value="{{ $question->id }}">
-                    <div class="row mb-5 answers d-flex">
-                        @foreach ($question->answers as $answer)
-                            <div class="col form-check mb-3">
-                                <input class="form-check-input" type="checkbox" value="{{$answer->id}}" name="answer[]" id="answer-{{$loop->iteration}}">
-                                <label class="form-check-label" for="answer-{{$loop->iteration}}">{{$answer->answer}}</label>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="row">
-                        <div class="col-4 offset-5 d-flex align-items-center">
-                            <button type="submit" value="search-now" class="border-0 bg-white">Search up to here</button>
+
+                <form id="search-button" method="GET" class="question-form">
+                    @if(isset($question) && $question)
+                        <div class="question-text">
+                            <h2>{{ $question->question }}</h2>
                         </div>
-                        <div class="col-3">
-                        @if (session('question_no') < 5)
-                            <div class="form">
-                                <button type="submit" value="next" class="btn btn-outline-dark rounded-pill">NEXT 
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </button>
+                        
+                        <input type="hidden" name="question_id" value="{{ $question->id }}">
+                        
+                        <div class="answers-container">
+                            @foreach ($question->answers as $answer)
+                            <div class="answer-option">
+                                <input class="answer-checkbox" type="checkbox" value="{{$answer->id}}" name="answer[]" id="answer-{{$loop->iteration}}">
+                                <label class="answer-label" for="answer-{{$loop->iteration}}">
+                                    <span class="answer-text">{{$answer->answer}}</span>
+                                    <i class="fa-solid fa-check answer-check-icon"></i>
+                                </label>
                             </div>
-                        @else
-                            <div class="form">
-                                <button type="submit" value="search" class="btn btn-outline-dark rounded-pill">SEARCH 
-                                    <i class="fa-solid fa-arrow-right"></i>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="alert alert-danger">
+                            <i class="fa-solid fa-exclamation-triangle me-2"></i>
+                            No question available. Please try again.
+                        </div>
+                    @endif
+
+                    @if(isset($question) && $question)
+                    <div class="form-actions">
+                        <button type="submit" value="search-now" class="btn-search-now">
+                            <i class="fa-solid fa-search me-2"></i>
+                            Search up to here
+                        </button>
+                        
+                        <div class="next-button-wrapper">
+                            @php
+                                $currentQuestion = session('question_no') ?? 1;
+                            @endphp
+                            @if ($currentQuestion < 5)
+                                <button type="submit" value="next" class="btn-next">
+                                    Next Question
+                                    <i class="fa-solid fa-arrow-right ms-2"></i>
                                 </button>
-                            </div>
-                        @endif
+                            @else
+                                <button type="submit" value="search" class="btn-search-final">
+                                    <i class="fa-solid fa-magic me-2"></i>
+                                    Generate My Plan
+                                </button>
+                            @endif
+                        </div>
                     </div>
+                    @endif
                 </form>
             </div>
         </div>

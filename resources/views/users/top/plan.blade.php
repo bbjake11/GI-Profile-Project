@@ -46,10 +46,12 @@
                                         <div class="px-2">
                                             @if ($place['image'])
                                                 <a href="{{ route('placedetails', $place['place_id']) }}">
-                                                    <img src="{{ asset("/storage/sample/{$place['image']}") }}" class="img-sm" alt="{{ $place['image'] }}">
+                                                    <img src="{{ asset("/storage/sample/{$place['image']}") }}" class="img-sm" alt="{{ $place['image'] }}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=400&q=80';">
                                                 </a>
                                             @else
-                                                <img src="{{ asset('/images/no-image.png') }}" class="img-sm" alt="no-image.png">
+                                                <a href="{{ route('placedetails', $place['place_id']) }}">
+                                                    <img src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=400&q=80" class="img-sm" alt="Japan travel">
+                                                </a>
                                             @endif
                                         </div>
                                         <p class="place-desc px-2">{{ $place['description'] }}</p>

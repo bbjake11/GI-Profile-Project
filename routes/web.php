@@ -45,7 +45,9 @@ Route::get('/search/place', [SearchController::class, 'search'])->name('search.p
 # Place Detail Pages
 Route::get('/{id}/placedetails',[PlaceController::class, 'index'])->name('placedetails');
 
-# Social Login
+# Login routes are handled by Auth::routes() below, but we override the view
+
+# Social Login (kept for backward compatibility, but not used in navigation)
 Route::get('/social_login', [SocialLoginController::class, 'social_login'])->name('social_login');
 Route::post('/social_login/save-in-session/ajax', [SocialLoginController::class, 'saveInSession']); 
 Route::get('/auth/google', [SocialLoginController::class, 'redirectToGoogle'])->name('auth.google');

@@ -2,8 +2,17 @@
   .container-out{
       width: 330px;
       height: 550px;
-      border: 1px solid black;
+      border: 2px solid rgba(220, 20, 60, 0.2);
       border-radius: 25px;
+      background: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+  }
+
+  .container-out:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(220, 20, 60, 0.2);
+      border-color: rgba(220, 20, 60, 0.4);
   }
 
   .container-plan{
@@ -13,24 +22,46 @@
   }
 
   .container-plan::-webkit-scrollbar{
-      display:none;
+      width: 6px;
+  }
+
+  .container-plan::-webkit-scrollbar-track{
+      background: #f1f1f1;
+      border-radius: 10px;
+  }
+
+  .container-plan::-webkit-scrollbar-thumb{
+      background: #dc143c;
+      border-radius: 10px;
   }
 
   .img-xs{
       width: 100px;
+      border-radius: 8px;
   }
 
   #btn-see-more{
       width: 250px;
+      background: linear-gradient(135deg, #dc143c 0%, #b71c1c 100%);
+      color: white;
+      border: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+  }
+
+  #btn-see-more:hover {
+      background: linear-gradient(135deg, #b71c1c 0%, #8b0000 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(220, 20, 60, 0.4);
   }
 
 </style>
 
 <div class="each-place-div">
-  <div class="container-out col-3 bg-white shadow mb-4 mx-4 p-1">
-    <h4 class="h5 text-capitalize text-center">{{ $plan->title }}</h4>
-    <div class = "bg-light pt-1">
-      <ul class="nav nav-pills mb-3" id="plan_id-tab{{ $plan->id }}" role="tablist">
+  <div class="container-out col-3 bg-white shadow mb-4 mx-4 p-3">
+    <h4 class="h5 text-capitalize text-center mb-3" style="color: #dc143c; font-weight: 700;">{{ $plan->title }}</h4>
+    <div class="bg-light pt-2 pb-2 rounded">
+      <ul class="nav nav-pills mb-3 justify-content-center" id="plan_id-tab{{ $plan->id }}" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active h6 day_ones" id="plan_id_day1-tab{{ $plan->id  }}" data-bs-toggle="pill" data-bs-target="#plan_id_day1-{{ $plan->id }}" type="button" role="tab" aria-controls="plan_id_day1-{{ $plan->id  }}" aria-selected="true">Day 1</button>
         </li>
@@ -93,10 +124,11 @@
       </div>
     </div>
 
-    <div class=" d-flex justify-content-center p-3 h6">
+    <div class="d-flex justify-content-center p-3">
       <form action="{{ route('show.plan', $plan->id )}}" method="get">
-
-        <button class="btn btn-md btn-outline-dark rounded-pill h6" id="btn-see-more" > SEE MORE </button>
+        <button class="btn btn-md rounded-pill h6" id="btn-see-more">
+          <i class="fa-solid fa-arrow-right me-2"></i>SEE MORE
+        </button>
       </form>
     </div>
   </div>

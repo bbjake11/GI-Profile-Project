@@ -52,6 +52,16 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showLoginForm()
+    {
+        return view('users.login');
+    }
+
     // override because of social login
     protected function credentials(Request $request)
     {

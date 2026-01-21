@@ -1,0 +1,2 @@
+$(".slider").slick({autoplay:!1,infinite:!1,slidesToShow:3,slidesToScroll:3,prevArrow:'<div class="slick-prev"></div>',nextArrow:'<div class="slick-next"></div>',dots:!0});
+//# sourceMappingURL=common.js.map

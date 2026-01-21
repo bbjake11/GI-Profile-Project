@@ -9,81 +9,71 @@
 @section('content')
 
 @php
-    $interest_span_class = 'h4 border bg-white rounded-pill d-inline-block m-2 py-2 px-3';
-    $interest_i_class = 'fa-solid fa-circle-xmark ps-2';
+    $interest_span_class = 'interest-badge';
+    $interest_i_class = 'fa-solid fa-circle-xmark remove-interest';
 @endphp
 
-<style type="text/css">
-    .place-img-div,.plan-div,.my-plan-div {
-        position: relative;
-    }
-
-    .see-place {
-        position: absolute;
-        top: 24px;
-        left: 24px;
-    }
-
-    .del-place {
-        position: absolute;
-        top: 24px;
-        right: 24px;
-    }
-
-    .del-plan,.del-my-plan {
-        position: absolute;
-        top: 16px;
-        right: 56px;
-    }
-
-    #div-profile:hover {
-        cursor: pointer;
-    }
-
-    .fa-circle-xmark:hover,.fa-arrow-up-right-from-square:hover
-    {
-        cursor: pointer;
-        color: #F7C229 !important;
-    }
-
-</style>
-
-
-<div id="first-page" style="background-image: url('/images/leaf-black-image.png');">
-    <div class="container" style="height: 800px;">
-        <div class="row">
-            <div class="col-3">
-                <div id="div-profile" class="text-center" style="margin-top: 136px;" data-bs-toggle="modal" data-bs-target="#profile">
-                    @if (Auth::user()->avatar)
-                        <img src="{{ asset("storage/avatar/".Auth::user()->avatar) }}" alt="avatar" class="img-thumbnail"/>
-                    @else
-                        <i class="fa-solid fa-user bg-white text-secondary border border-secondary rounded p-3" style="font-size: 15rem;"></i>
-                    @endif
-                    <a class="h4 text-white text-decoration-none mt-3 d-block" href="#" id="username">{{ Auth::user()->first_name." ".Auth::user()->last_name}}</a>
+<div class="my-page-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4">
+                <div class="profile-section">
+                    <div id="div-profile" class="profile-avatar-wrapper" data-bs-toggle="modal" data-bs-target="#profile">
+                        @if (Auth::user()->avatar)
+                            <img src="{{ asset("storage/avatar/".Auth::user()->avatar) }}" alt="avatar" class="profile-avatar"/>
+                        @else
+                            <div class="profile-avatar-icon">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                        @endif
+                    </div>
+                    <a class="profile-name" href="#" id="username">{{ Auth::user()->first_name." ".Auth::user()->last_name}}</a>
+                    <div class="edit-profile-badge" data-bs-toggle="modal" data-bs-target="#profile">
+                        <i class="fa-solid fa-pen"></i>
+                        <span>Edit Profile</span>
+                    </div>
+                    @include('users.my_page.modal.profile')
                 </div>
-                @include('users.my_page.modal.profile')
             </div>
-            <div class="col-9">
-                <div class="row">
-                    <div class="col-2">
+            <div class="col-md-8">
+                <div class="favorite-places-container">
+                    <div class="section-header section-header-dark">
+                        <i class="fa-solid fa-heart"></i>
+                        <h3>My Favorite Places</h3>
                     </div>
-                    <div class="col-8">
-                        <h3 class="text-white text-line-white m-5">My favorite places</h3>
-                    </div>
-                </div>
-
-                <div class="row" style="height: 560px; overflow: auto;">
-                    @forelse ($place_favorites as $place_favorite)
-                        <div id="place-favorite-{{ $place_favorite->place_id }}" class="col-3 p-2 m-0 place-img-div">
-                            <img src="{{ asset("storage/sample/{$place_favorite->place->image}") }}" alt="place-image-{{ $place_favorite->place->id }}" class="w-100 place-img"/>
-                            <a href="{{ route('placedetails', $place_favorite->place_id) }}">
-                                <i class="fa-solid fa-arrow-up-right-from-square text-white see-place h4"></i>
-                            </a>
-                            <i id="place-favorite-i-{{ $place_favorite->place_id }}" class="fa-solid fa-circle-xmark ps-2 text-white del-place h4"></i>
+                    @if($place_favorites->count() > 0)
+                        <div class="favorite-places-grid">
+                            @foreach ($place_favorites as $place_favorite)
+                                <div id="place-favorite-{{ $place_favorite->place_id }}" class="place-favorite-card">
+                                    @if($place_favorite->place->image)
+                                        <img src="{{ asset("storage/sample/{$place_favorite->place->image}") }}" alt="{{ $place_favorite->place->name_en }}" class="place-favorite-image" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=400&q=80';">
+                                    @else
+                                        <img src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=400&q=80" alt="{{ $place_favorite->place->name_en }}" class="place-favorite-image">
+                                    @endif
+                                    <div class="place-favorite-overlay">
+                                        <h5 class="place-favorite-name">{{ $place_favorite->place->name_en }}</h5>
+                                    </div>
+                                    <div class="place-favorite-actions">
+                                        <a href="{{ route('placedetails', $place_favorite->place_id) }}" class="action-btn" title="View Details">
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                        <button type="button" id="place-favorite-i-{{ $place_favorite->place_id }}" class="action-btn delete-btn" title="Remove">
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    @empty
-                        <h3 class="text-white text-center">You have no favorite places.</h3>
-                    @endforelse
+                    @else
+                        <div class="empty-state">
+                            <i class="fa-solid fa-heart"></i>
+                            <h3>No Favorite Places Yet</h3>
+                            <p>Start exploring and add places to your favorites!</p>
+                            <a href="{{ route('search.index') }}" class="btn btn-primary mt-3">
+                                <i class="fa-solid fa-search me-2"></i>Explore Places
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -91,82 +81,121 @@
 </div>
 
 <div class="container py-5">
-    <div class="row">
-        <div class="col-2">
+    <!-- Favorite Plans Section -->
+    <div class="plans-section">
+        <div class="section-header section-header-dark">
+            <i class="fa-solid fa-bookmark"></i>
+            <h3>My Favorite Plans</h3>
         </div>
-        <div class="col-8">
-            <h3 class="text-black text-line-black m-5">My favorite plans</h3>
-        </div>
+        @if($plan_favorites->count() > 0)
+            <ul class="slider p-0" id="slider-plan-favorite">
+                @foreach ($plan_favorites as $plan_favorite)
+                    <li>
+                        @php $plan = $plan_favorite->plan; @endphp
+                        <div class="plan-div" style="position: relative;">
+                            @include('users.my_page.plan')
+                            <button type="button" id="plan-favorite-i-{{ $plan_favorite->id }}" class="action-btn delete-btn" style="position: absolute; top: 15px; right: 15px;" title="Remove from favorites">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </button>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <div class="empty-state">
+                <i class="fa-solid fa-bookmark"></i>
+                <h3>No Favorite Plans Yet</h3>
+                <p>Browse recommended plans and add them to your favorites!</p>
+            </div>
+        @endif
     </div>
 
-    <ul class="slider p-0" id="slider-plan-favorite">
-        @foreach ($plan_favorites as $plan_favorite)
-            <li>
-                @php $plan = $plan_favorite->plan; @endphp
-                <div class="plan-div">
-                    @include('users.my_page.plan')
-                    <i id="plan-favorite-i-{{ $plan_favorite->id }}" class="fa-solid fa-circle-xmark ps-2 del-plan h4"></i>
-                </div>
-            </li>
-        @endforeach
-    </ul>
-    @if ($plan_favorites->count() === 0)
-        <h3 class="text-black text-center">You have no favorite plans.</h3>
-    @endif
-
-    <div class="row">
-        <div class="col-2">
+    <!-- My Own Plans Section -->
+    <div class="plans-section">
+        <div class="section-header section-header-dark">
+            <i class="fa-solid fa-route"></i>
+            <h3>My Own Plans</h3>
         </div>
-        <div class="col-8">
-            <h3 class="text-black text-line-black m-5">My own plans</h3>
-        </div>
-    </div>
-
-    <ul class="slider p-0" id="slider-my-plan">
-        @foreach ($my_plans as $plan)
-            <li>
-                <div class="my-plan-div">
-                    @include('users.my_page.plan')
-                    <i id="my-plan-i-{{ $plan->id }}" class="fa-solid fa-circle-xmark ps-2 del-my-plan h4"></i>
-                </div>
-            </li>
-        @endforeach
-    </ul>
-    @if ($my_plans->count() === 0)
-        <h3 class="text-black text-center">You have no your own plans.</h3>
-    @endif
-
-
-    <div class="my-5 pt-5">
-
-        {{-- Interests --}}
-        <div onclick="obj=document.getElementById('open').style; obj.display=(obj.display==='none')?'block':'none';">
-            <div class="border bg-white rounded justify-content-center d-flex align-items-center mx-2" style="height: 48px">
-                <a style="cursor:pointer;">
-                    <h4 class="d-inline mt-2">INTERESTS </h4><i class="fa-solid fa-plus"></i>
+        @if($my_plans->count() > 0)
+            <ul class="slider p-0" id="slider-my-plan">
+                @foreach ($my_plans as $plan)
+                    <li>
+                        <div class="my-plan-div" style="position: relative;">
+                            @include('users.my_page.plan')
+                            <button type="button" id="my-plan-i-{{ $plan->id }}" class="action-btn delete-btn" style="position: absolute; top: 15px; right: 15px;" title="Delete plan">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </button>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <div class="empty-state">
+                <i class="fa-solid fa-route"></i>
+                <h3>No Plans Created Yet</h3>
+                <p>Create your first personalized travel plan!</p>
+                <a href="{{ route('suggest-plans.questions') }}" class="btn btn-primary mt-3">
+                    <i class="fa-solid fa-plus me-2"></i>Create Plan
                 </a>
             </div>
+        @endif
+    </div>
+
+
+    <!-- Interests Section -->
+    <div class="interests-section">
+        <div class="interests-header" onclick="toggleInterests()">
+            <h4>
+                <i class="fa-solid fa-tags"></i>
+                <span>My Interests</span>
+                <i class="fa-solid fa-chevron-down ms-auto" id="interests-chevron"></i>
+            </h4>
         </div>
-        <div id="open" style="display:none; clear:both;">
-            <div class="border bg-white rounded-bottom mx-2">
-                <div class="row">
-                    <div id="interest-grp" class="col-9">
-                        @foreach ($interests as $interest)
-                            <span id="interest-{{ $interest->id }}" class="{{ $interest_span_class }}">
-                                {{ $interest->keyword->name }}
-                                <i id="interest-i-{{ $interest->id }}" class="{{ $interest_i_class }}"></i>
-                            </span>
-                        @endforeach
-                    </div>
-                    <div class="col-3 my-2">
-                        <select style="width:240px;" name="keyword" id="keyword-select"></select>
-                        <span id="add-keyword" class="btn btn-outline-dark mx-1"><i class="fa-solid fa-plus"></i></span>
-                    </div>
-                </div>
+        <div id="open" class="interests-content {{ $interests->count() > 0 ? 'open' : '' }}">
+            <div id="interest-grp" class="interests-list">
+                @foreach ($interests as $interest)
+                    <span id="interest-{{ $interest->id }}" class="{{ $interest_span_class }}">
+                        <span>{{ $interest->keyword->name }}</span>
+                        <i id="interest-i-{{ $interest->id }}" class="{{ $interest_i_class }}"></i>
+                    </span>
+                @endforeach
+                @if($interests->count() === 0)
+                    <p class="text-muted">No interests added yet. Add some keywords to get personalized recommendations!</p>
+                @endif
+            </div>
+            <div class="add-interest-form">
+                <select name="keyword" id="keyword-select" style="width: 100%;"></select>
+                <button type="button" id="add-keyword" class="btn-add-interest">
+                    <i class="fa-solid fa-plus"></i>
+                    Add Interest
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+function toggleInterests() {
+    const content = document.getElementById('open');
+    const chevron = document.getElementById('interests-chevron');
+    if (content.classList.contains('open')) {
+        content.classList.remove('open');
+        chevron.style.transform = 'rotate(0deg)';
+    } else {
+        content.classList.add('open');
+        chevron.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Initialize chevron rotation if interests section is open
+document.addEventListener('DOMContentLoaded', function() {
+    const content = document.getElementById('open');
+    const chevron = document.getElementById('interests-chevron');
+    if (content && content.classList.contains('open')) {
+        chevron.style.transform = 'rotate(180deg)';
+    }
+});
+</script>
 
 
 <script type="text/javascript">
@@ -195,7 +224,11 @@
                     const span = document.createElement('span');
                     span.id = `interest-${res.interest_id}`;
                     span.className = interest_span_class;
-                    span.textContent = res.keyword_name;
+                    
+                    // Create text span
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = res.keyword_name;
+                    span.appendChild(textSpan);
 
                     // Create a new i element
                     const i = document.createElement('i');
@@ -208,6 +241,11 @@
 
                     // Add the new span element to the DOM
                     const interest_grp = document.getElementById('interest-grp');
+                    // Remove empty message if exists
+                    const emptyMsg = interest_grp.querySelector('p.text-muted');
+                    if (emptyMsg) {
+                        emptyMsg.remove();
+                    }
                     interest_grp.appendChild(span);
                 }
             } else {

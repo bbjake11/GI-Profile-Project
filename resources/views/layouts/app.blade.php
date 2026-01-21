@@ -67,9 +67,14 @@
 
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('social_login'))
+                            @if (Route::has('login'))
                                 <li class="nav-item h5">
-                                    <a class="nav-link" href="{{ route('social_login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                </li>
+                            @endif
+                            @if (Route::has('register'))
+                                <li class="nav-item h5">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
