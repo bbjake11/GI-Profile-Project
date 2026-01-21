@@ -128,6 +128,8 @@ Railway should auto-detect Laravel, but let's make sure:
 3. **Click "Raw Editor"** (easier to paste all at once)
 4. **Add these variables:**
 
+### Option A: Using Variable References (Recommended - Auto-updates)
+
 ```env
 APP_NAME=Samurai Travel
 APP_ENV=production
@@ -165,8 +167,53 @@ MAIL_FROM_ADDRESS=null
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
+### Option B: Using Actual Values (Your Current Database)
+
+```env
+APP_NAME=Samurai Travel
+APP_ENV=production
+APP_KEY=base64:9IqZFzqjyZvE8I0Iz0vkAPIof7JPPNFdpqLV7AT1/es=
+APP_DEBUG=false
+APP_URL=https://your-app-name.up.railway.app
+
+LOG_CHANNEL=stack
+LOG_LEVEL=error
+
+DB_CONNECTION=mysql
+DB_HOST=mysql.railway.internal
+DB_PORT=3306
+DB_DATABASE=railway
+DB_USERNAME=root
+DB_PASSWORD=chqEdPaqukCxLRskoGsFcrztBPbtvZLd
+
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=null
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
 **⚠️ IMPORTANT NOTES:**
-- `DB_HOST`, `DB_PORT`, etc. use `${{MySQL.VARIABLE_NAME}}` syntax - Railway will automatically inject MySQL credentials!
+- **Option A (Variable References)** is recommended - Railway automatically updates them if database credentials change
+- **Option B (Actual Values)** uses your current MySQL credentials:
+  - Host: `mysql.railway.internal`
+  - Port: `3306`
+  - Database: `railway`
+  - Username: `root`
+  - Password: `chqEdPaqukCxLRskoGsFcrztBPbtvZLd`
 - `APP_URL` - You'll get this after first deployment (something like `https://samurai-travel-production.up.railway.app`)
 - **Don't forget to update `APP_URL`** after Railway gives you the URL!
 

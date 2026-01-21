@@ -27,19 +27,34 @@ railway up
 
 ### 4️⃣ Set Environment Variables
 In Laravel service → Variables → Add:
-```env
-APP_NAME=Samurai Travel
-APP_ENV=production
-APP_KEY=base64:9IqZFzqjyZvE8I0Iz0vkAPIof7JPPNFdpqLV7AT1/es=
-APP_DEBUG=false
-APP_URL=https://your-app.up.railway.app
 
+**Option A - Variable References (Recommended):**
+```env
 DB_CONNECTION=mysql
 DB_HOST=${{MySQL.MYSQLHOST}}
 DB_PORT=${{MySQL.MYSQLPORT}}
 DB_DATABASE=${{MySQL.MYSQLDATABASE}}
 DB_USERNAME=${{MySQL.MYSQLUSER}}
 DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}
+```
+
+**Option B - Actual Values:**
+```env
+DB_CONNECTION=mysql
+DB_HOST=mysql.railway.internal
+DB_PORT=3306
+DB_DATABASE=railway
+DB_USERNAME=root
+DB_PASSWORD=chqEdPaqukCxLRskoGsFcrztBPbtvZLd
+```
+
+**Plus these required variables:**
+```env
+APP_NAME=Samurai Travel
+APP_ENV=production
+APP_KEY=base64:9IqZFzqjyZvE8I0Iz0vkAPIof7JPPNFdpqLV7AT1/es=
+APP_DEBUG=false
+APP_URL=https://your-app.up.railway.app
 ```
 
 ### 5️⃣ Get Your URL
